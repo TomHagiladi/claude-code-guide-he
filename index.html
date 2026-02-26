@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך התקנת Claude Code בתוסף VS Code</title>
+    <meta name="description" content="מדריך מלא בעברית להתקנת Claude Code בתוסף VS Code - צעד אחר צעד למתחילים">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #70B040;
+            --green-dark: #5A9030;
+            --green-light: #E8F5D8;
+            --green-bg: #F5FAF0;
+            --red: #A02020;
+            --red-light: #FFF0F0;
+            --red-bg: #FDE8E8;
+            --dark: #2D2D2D;
+            --medium: #555;
+            --light: #888;
+            --border: #E0E0E0;
+            --white: #FFFFFF;
+            --gray-bg: #F8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', Arial, sans-serif;
+            color: var(--dark);
+            background: var(--white);
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 50%, #8BC34A 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .hero-logo {
+            max-width: 200px;
+            margin-bottom: 25px;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        .hero h1 {
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero h1 span {
+            display: block;
+            font-size: 0.6em;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 0.95em;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* ===== NAVIGATION / TOC ===== */
+        .toc {
+            background: var(--white);
+            border-bottom: 2px solid var(--green-light);
+            padding: 25px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .toc-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .toc a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: var(--green-bg);
+            color: var(--green-dark);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .toc a:hover {
+            background: var(--green);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .toc a .num {
+            background: var(--green);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 700;
+        }
+
+        .toc a:hover .num {
+            background: white;
+            color: var(--green);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: 60px 0 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: var(--green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(112, 176, 64, 0.3);
+        }
+
+        .section-header h2 {
+            font-size: 1.7em;
+            font-weight: 700;
+            color: var(--green-dark);
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin: 35px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--green-light);
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        /* ===== STEP LISTS ===== */
+        .steps {
+            list-style: none;
+            counter-reset: step;
+            margin: 20px 0;
+        }
+
+        .steps li {
+            counter-increment: step;
+            padding: 12px 55px 12px 15px;
+            margin-bottom: 8px;
+            background: var(--gray-bg);
+            border-radius: 10px;
+            position: relative;
+            border-right: 3px solid var(--green);
+        }
+
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: var(--green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+
+        /* ===== INFO BOXES ===== */
+        .tip, .warning, .info-box {
+            padding: 18px 22px;
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .tip {
+            background: var(--green-light);
+            border-right: 4px solid var(--green);
+        }
+
+        .tip::before {
+            content: '💡';
+            font-size: 1.2em;
+            margin-left: 8px;
+        }
+
+        .warning {
+            background: var(--red-light);
+            border-right: 4px solid var(--red);
+        }
+
+        .warning::before {
+            content: '⚠️';
+            font-size: 1.2em;
+            margin-left: 8px;
+        }
+
+        .tip-title, .warning-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .tip .tip-title { color: var(--green-dark); }
+        .warning .warning-title { color: var(--red); }
+
+        /* ===== CODE BOXES ===== */
+        .code-box {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 12px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-box .label {
+            position: absolute;
+            top: 6px;
+            left: 10px;
+            font-size: 0.7em;
+            color: #888;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .code-box code {
+            color: #9CDCFE;
+        }
+
+        /* ===== SCREENSHOT PLACEHOLDERS ===== */
+        .screenshot {
+            margin: 25px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .screenshot img {
+            width: 100%;
+            display: block;
+        }
+
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, #F0F4F8, #E2E8F0);
+            padding: 50px 30px;
+            text-align: center;
+            color: var(--light);
+        }
+
+        .screenshot-placeholder .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .screenshot-placeholder p {
+            color: var(--light);
+            font-size: 0.9em;
+        }
+
+        .screenshot-caption {
+            background: var(--gray-bg);
+            padding: 10px 15px;
+            font-size: 0.85em;
+            color: var(--medium);
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ===== TABLES ===== */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: var(--green);
+            color: white;
+            padding: 12px 18px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        tbody td {
+            padding: 11px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--green-bg);
+        }
+
+        tbody tr:hover {
+            background: var(--green-light);
+        }
+
+        /* ===== KEYBOARD SHORTCUTS ===== */
+        kbd {
+            background: #EEE;
+            border: 1px solid #CCC;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            direction: ltr;
+            display: inline-block;
+        }
+
+        /* ===== TROUBLESHOOTING ===== */
+        .problem {
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .problem-title {
+            background: var(--red-bg);
+            padding: 12px 18px;
+            font-weight: 700;
+            color: var(--red);
+            border-bottom: 1px solid #F0C0C0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .problem-solution {
+            padding: 15px 18px;
+            background: var(--white);
+        }
+
+        /* ===== TIPS SECTION ===== */
+        .tip-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .tip-card h4 {
+            color: var(--green-dark);
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .tip-card p {
+            color: var(--medium);
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        /* ===== FEATURE CARDS (HERO) ===== */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 40px auto 0;
+            max-width: 700px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+
+        .feature-card .feature-num {
+            width: 30px;
+            height: 30px;
+            background: white;
+            color: var(--green);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .feature-card .feature-label {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        footer .logo-footer {
+            max-width: 150px;
+            margin-bottom: 15px;
+            filter: brightness(0) invert(1);
+            opacity: 0.6;
+        }
+
+        footer a {
+            color: var(--green);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== USEFUL LINKS ===== */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .link-card {
+            background: var(--green-bg);
+            border: 1px solid var(--green-light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--green-dark);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .link-card:hover {
+            background: var(--green);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .link-card small {
+            display: block;
+            font-weight: 400;
+            font-size: 0.8em;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2em; }
+            .features { grid-template-columns: repeat(2, 1fr); }
+            .toc-inner { gap: 5px; }
+            .toc a { font-size: 0.75em; padding: 4px 10px; }
+            .section-header h2 { font-size: 1.3em; }
+            .step-number { width: 40px; height: 40px; font-size: 1.1em; }
+        }
+
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+
+        /* Selection color */
+        ::selection {
+            background: var(--green-light);
+            color: var(--green-dark);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+    <img src="images/logo.png" alt="Tom Hagiladi Logo" class="hero-logo">
+    <h1>
+        מדריך התקנה
+        <span>Claude Code בתוסף VS Code</span>
+    </h1>
+    <p class="subtitle">מדריך מלא למתחילים - צעד אחר צעד</p>
+    <div class="hero-badge">מתאים למתחילים מוחלטים - אין צורך ברקע טכני! ✨</div>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-num">1</div>
+            <div class="feature-label">התקנת<br>עורך הקוד</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-num">2</div>
+            <div class="feature-label">התקנת<br>התוסף</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-num">3</div>
+            <div class="feature-label">הגדרת<br>חשבון</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-num">4</div>
+            <div class="feature-label">שימוש<br>ראשון</div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== TABLE OF CONTENTS ===== -->
+<nav class="toc">
+    <div class="toc-inner">
+        <a href="#intro"><span class="num">1</span> מבוא</a>
+        <a href="#requirements"><span class="num">2</span> דרישות מערכת</a>
+        <a href="#install-vscode"><span class="num">3</span> התקנת עורך הקוד</a>
+        <a href="#install-extension"><span class="num">4</span> התקנת התוסף</a>
+        <a href="#account"><span class="num">5</span> הגדרת חשבון</a>
+        <a href="#first-use"><span class="num">6</span> שימוש ראשון</a>
+        <a href="#troubleshooting"><span class="num">7</span> פתרון בעיות</a>
+        <a href="#tips"><span class="num">8</span> טיפים</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== SECTION 1: INTRO ===== -->
+<section class="section" id="intro">
+    <div class="section-header">
+        <div class="step-number">1</div>
+        <h2>מבוא - מה זה ולמה זה שימושי?</h2>
+    </div>
+
+    <h3>מה זה עורך הקוד (VS Code)?</h3>
+    <p>
+        VS Code (או בשמו המלא: Visual Studio Code) הוא תוכנה חינמית של מיקרוסופט.
+        זוהי תוכנה שבה אפשר לפתוח קבצים, לערוך אותם, ולעבוד על פרויקטים.
+        היא פופולרית מאוד בעולם הטכנולוגיה, ויש לה מיליוני משתמשים.
+        <strong>אל תיבהלו מהשם - לא צריך לדעת לכתוב קוד כדי להשתמש בה!</strong>
+    </p>
+
+    <h3>מה זה העוזר החכם (Claude Code)?</h3>
+    <p>
+        Claude Code הוא עוזר חכם מבוסס בינה מלאכותית, שיושב בתוך VS Code.
+        הוא נבנה על ידי חברת Anthropic.
+        בניגוד לצ'אטבוט רגיל, Claude Code יכול גם <strong>לכתוב קוד בשבילכם</strong>,
+        לערוך קבצים, להריץ פקודות, ולבנות פרויקטים שלמים - הכל לבד.
+    </p>
+    <p>
+        אתם רק צריכים לתאר מה אתם רוצים במילים שלכם,
+        והוא עושה את כל העבודה הטכנית.
+        לדוגמה: "תבנה לי אתר אינטרנט" או "תתקן לי את השגיאה הזו" -
+        והוא יעשה את זה בשבילכם.
+    </p>
+
+    <h3>למה הצירוף הזה שימושי?</h3>
+    <ul class="steps">
+        <li>אתם מתארים מה אתם רוצים, ו-Claude Code כותב את הקוד במקומכם</li>
+        <li>הוא יכול לבנות פרויקטים שלמים - אתרים, כלים, אוטומציות</li>
+        <li>הוא מסביר מה הוא עשה ולמה, כך שאפשר גם ללמוד תוך כדי</li>
+        <li>הוא מזהה בעיות ומתקן אותן לבד, בלי שתצטרכו להבין פרטים טכניים</li>
+        <li>הוא עובד ישירות על הקבצים שלכם - לא צריך להעתיק ולהדביק</li>
+    </ul>
+
+    <div class="warning">
+        <div class="warning-title">⚠️ שימו לב</div>
+        Claude Code הוא כלי בתשלום. צריך מנוי בעלות 20 דולר לחודש לפחות.
+        התוסף עצמו חינמי להתקנה, אבל השימוש בו דורש חשבון בתשלום.
+    </div>
+</section>
+
+<!-- ===== SECTION 2: REQUIREMENTS ===== -->
+<section class="section" id="requirements">
+    <div class="section-header">
+        <div class="step-number">2</div>
+        <h2>דרישות מערכת - מה צריך לפני שמתחילים</h2>
+    </div>
+
+    <h3>דרישות חומרה ותוכנה</h3>
+    <p>לפני שמתחילים, ודאו שיש לכם את הדברים הבאים:</p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th>דרישה</th><th>פרטים</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>מערכת הפעלה</td><td>Windows 10 / Windows 11</td></tr>
+                <tr><td>זיכרון</td><td>4 GB לפחות, 16 GB מומלץ</td></tr>
+                <tr><td>אינטרנט</td><td>חיבור אינטרנט פעיל</td></tr>
+                <tr><td>VS Code</td><td>גרסה 1.98.0 ומעלה</td></tr>
+                <tr><td>Git for Windows</td><td>חובה! ראו הסבר למטה</td></tr>
+                <tr><td>חשבון</td><td>מנוי בתשלום</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>למה צריך את כלי העזר הזה (Git)?</h3>
+    <p>
+        Git for Windows הוא תוכנה חינמית שצריך להתקין ב-Windows.
+        Claude Code משתמש בתוכנה הזו ברקע, מאחורי הקלעים.
+        <strong>אתם לא צריכים ללמוד איך להשתמש ב-Git</strong> - רק צריך שהוא יהיה מותקן במחשב.
+        ההתקנה לוקחת 2 דקות ועושים אותה פעם אחת בלבד.
+    </p>
+
+    <div class="tip">
+        <div class="tip-title">💡 טיפ</div>
+        אם אתם לא בטוחים אם Git מותקן אצלכם, לא נורא - פשוט התקינו אותו.
+        אם הוא כבר מותקן, זה לא יגרום נזק.
+    </div>
+
+    <h3>אפשרויות מנוי (תמחור)</h3>
+    <p>כדי להשתמש ב-Claude Code צריך מנוי בתשלום. הנה האפשרויות:</p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th>שם המנוי</th><th>מחיר</th><th>המלצה</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Claude Pro</td><td>20 דולר לחודש</td><td>שימוש מוגבל</td></tr>
+                <tr><td>Claude Max 5x</td><td>100 דולר לחודש</td><td><strong>מומלץ!</strong></td></tr>
+                <tr><td>Claude Max 20x</td><td>200 דולר לחודש</td><td>שימוש אינטנסיבי</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ===== SECTION 3: INSTALL VS CODE ===== -->
+<section class="section" id="install-vscode">
+    <div class="section-header">
+        <div class="step-number">3</div>
+        <h2>התקנת עורך הקוד (VS Code)</h2>
+    </div>
+
+    <p>אם VS Code כבר מותקן אצלכם, דלגו ישר לשלב הבא. אם לא - בצעו את השלבים הבאים:</p>
+
+    <h3>הורדה והתקנה של עורך הקוד</h3>
+    <ol class="steps">
+        <li>פתחו את הדפדפן שלכם (כמו Chrome או Edge)</li>
+        <li>גלשו לאתר:</li>
+    </ol>
+
+    <div class="code-box">
+        <code>https://code.visualstudio.com</code>
+    </div>
+
+    <ol class="steps" start="3">
+        <li>לחצו על הכפתור הגדול <strong>"Download for Windows"</strong></li>
+    </ol>
+
+    <!-- SCREENSHOT: VS Code download page -->
+    <div class="screenshot">
+        <img src="images/vscode-download.png" alt="עמוד ההורדה של VS Code עם כפתור Download for Windows"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: עמוד ההורדה של VS Code<br>כפתור Download for Windows במרכז הדף</p></div>'">
+        <div class="screenshot-caption">עמוד ההורדה של VS Code - לחצו על הכפתור הכחול הגדול</div>
+    </div>
+
+    <ol class="steps" start="4">
+        <li>הריצו את הקובץ שהורדתם (לחצו עליו פעמיים)</li>
+        <li>לחצו <strong>"Next"</strong> בכל השלבים של אשף ההתקנה ואז <strong>"Finish"</strong></li>
+        <li>VS Code יפתח אוטומטית!</li>
+    </ol>
+
+    <div class="tip">
+        <div class="tip-title">💡 טיפ</div>
+        אם מופיעה שאלה איזה סוג התקנה רוצים (User Setup / System Setup)
+        בחרו <strong>User Setup</strong> - זו האפשרות הפשוטה שלא דורשת הרשאות מיוחדות.
+    </div>
+
+    <h3>התקנת כלי עזר נדרש (Git for Windows)</h3>
+    <p>
+        עכשיו נתקין את Git for Windows.
+        כפי שהסברנו, Claude Code צריך את התוכנה הזו כדי לעבוד.
+        ההתקנה פשוטה ומהירה:
+    </p>
+
+    <ol class="steps">
+        <li>גלשו לאתר:</li>
+    </ol>
+
+    <div class="code-box">
+        <code>https://git-scm.com/downloads/win</code>
+    </div>
+
+    <!-- SCREENSHOT: Git download page -->
+    <div class="screenshot">
+        <img src="images/git-download.png" alt="עמוד ההורדה של Git for Windows"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: עמוד ההורדה של Git for Windows<br>כפתור Click here to download</p></div>'">
+        <div class="screenshot-caption">עמוד ההורדה של Git for Windows - לחצו על כפתור ההורדה</div>
+    </div>
+
+    <ol class="steps" start="2">
+        <li>לחצו על <strong>"Click here to download"</strong></li>
+        <li>הריצו את קובץ ההתקנה ולחצו <strong>Next</strong> בכל השלבים</li>
+        <li>לא צריך לשנות שום הגדרה - הכל מוגדר כמו שצריך מראש</li>
+    </ol>
+
+    <div class="warning">
+        <div class="warning-title">⚠️ שימו לב</div>
+        Git for Windows נדרש גם אם אתם לא מתכוונים להשתמש ב-Git עצמו.
+        Claude Code משתמש בו ברקע ולא יעבוד בלעדיו.
+    </div>
+</section>
+
+<!-- ===== SECTION 4: INSTALL EXTENSION ===== -->
+<section class="section" id="install-extension">
+    <div class="section-header">
+        <div class="step-number">4</div>
+        <h2>התקנת התוסף (Claude Code)</h2>
+    </div>
+
+    <p>
+        עכשיו נתקין את התוסף של Claude Code בתוך VS Code.
+        תוסף (Extension) הוא כמו אפליקציה קטנה שמוסיפה יכולות חדשות לתוכנה.
+    </p>
+
+    <ol class="steps">
+        <li>פתחו את VS Code</li>
+        <li>לחצו על צירוף המקשים <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> כדי לפתוח את חלון התוספים</li>
+        <li>בשדה החיפוש שנפתח למעלה, הקלידו:</li>
+    </ol>
+
+    <div class="code-box">
+        <code>Claude Code</code>
+    </div>
+
+    <ol class="steps" start="4">
+        <li>מצאו את התוסף של <strong>Anthropic</strong> ולחצו <strong>"Install"</strong></li>
+    </ol>
+
+    <!-- SCREENSHOT: Extensions panel -->
+    <div class="screenshot">
+        <img src="images/extensions-panel.png" alt="חלון התוספים של VS Code עם חיפוש Claude Code"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: חלון התוספים של VS Code<br>חיפוש Claude Code ולחיצה על Install</p></div>'">
+        <div class="screenshot-caption">חלון התוספים - חפשו "Claude Code" ולחצו Install על התוסף של Anthropic</div>
+    </div>
+
+    <div class="warning">
+        <div class="warning-title">⚠️ חשוב!</div>
+        ודאו שהמפרסם (Publisher) של התוסף הוא <strong>Anthropic</strong> - זה התוסף הרשמי והבטוח.
+        יש תוספים לא רשמיים עם שמות דומים.
+    </div>
+
+    <ol class="steps" start="5">
+        <li>חכו כמה שניות עד שההתקנה מסתיימת</li>
+        <li>ייתכן שתתבקשו לאשר אמון במפרסם (Trust Publisher) - לחצו אישור</li>
+    </ol>
+
+    <div class="tip">
+        <div class="tip-title">💡 טיפ</div>
+        אם התוסף לא מופיע אחרי ההתקנה, פשוט סגרו את VS Code ופתחו אותו מחדש.
+    </div>
+</section>
+
+<!-- ===== SECTION 5: ACCOUNT ===== -->
+<section class="section" id="account">
+    <div class="section-header">
+        <div class="step-number">5</div>
+        <h2>הגדרת חשבון והתחברות</h2>
+    </div>
+
+    <p>
+        כדי להשתמש ב-Claude Code, צריך חשבון Anthropic עם מנוי בתשלום.
+        ההתחברות פשוטה ומתבצעת דרך הדפדפן.
+    </p>
+
+    <h3>יצירת חשבון (אם אין לכם)</h3>
+    <ol class="steps">
+        <li>גלשו לאתר:</li>
+    </ol>
+
+    <div class="code-box">
+        <code>https://claude.ai</code>
+    </div>
+
+    <!-- SCREENSHOT: Claude login -->
+    <div class="screenshot">
+        <img src="images/claude-login.png" alt="עמוד ההרשמה של Claude.ai"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: עמוד ההרשמה של claude.ai<br>כפתורי Sign Up ו-Log In</p></div>'">
+        <div class="screenshot-caption">עמוד ההרשמה של Claude - לחצו Sign Up</div>
+    </div>
+
+    <ol class="steps" start="2">
+        <li>לחצו על <strong>"Sign Up"</strong></li>
+        <li>הזינו כתובת אימייל וצרו סיסמה, או התחברו עם חשבון גוגל</li>
+        <li>אשרו את האימייל שנשלח אליכם</li>
+        <li>שדרגו למנוי Pro (או גבוה יותר) דרך הגדרות החשבון</li>
+    </ol>
+
+    <h3>התחברות בעורך הקוד</h3>
+    <p>אחרי שיש לכם חשבון עם מנוי, ההתחברות אוטומטית:</p>
+    <ol class="steps">
+        <li>פתחו את Claude Code ב-VS Code (נסביר בשלב הבא)</li>
+        <li>הדפדפן שלכם ייפתח אוטומטית</li>
+        <li>התחברו עם החשבון שיצרתם</li>
+        <li>אשרו את הגישה ל-Claude Code</li>
+        <li>חזרו ל-VS Code - מוכנים לעבוד!</li>
+    </ol>
+
+    <div class="tip">
+        <div class="tip-title">💡 טיפ</div>
+        ההתחברות מתבצעת בצורה מאובטחת דרך הדפדפן.
+        לא צריך להעתיק מפתחות או קודים - הכל קורה אוטומטית.
+        אם יש לכם מנוי Pro או Max, השימוש ב-Claude Code כלול במנוי.
+    </div>
+
+    <div class="warning">
+        <div class="warning-title">⚠️ שימו לב</div>
+        אם מישהו אמר לכם להגדיר משתנה בשם ANTHROPIC_API_KEY -
+        אל תעשו את זה אלא אם אתם יודעים למה.
+        זה יגרום לחיובים נפרדים במקום להשתמש במנוי שלכם.
+    </div>
+</section>
+
+<!-- ===== SECTION 6: FIRST USE ===== -->
+<section class="section" id="first-use">
+    <div class="section-header">
+        <div class="step-number">6</div>
+        <h2>שימוש ראשון - הפעלה ובדיקה</h2>
+    </div>
+
+    <h3>פתיחת העוזר החכם</h3>
+    <p>יש כמה דרכים לפתוח את Claude Code. הנה הקלה ביותר:</p>
+
+    <p><strong>דרך 1:</strong> לחצו על <strong>"Claude Code"</strong> בשורת הסטטוס (הפס הכחול בתחתית VS Code)</p>
+
+    <!-- SCREENSHOT: Status bar -->
+    <div class="screenshot">
+        <img src="images/status-bar.png" alt="שורת הסטטוס של VS Code עם כפתור Claude Code"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: שורת הסטטוס של VS Code<br>כפתור Claude Code בתחתית מימין</p></div>'">
+        <div class="screenshot-caption">שורת הסטטוס - לחצו על "Claude Code" בתחתית VS Code</div>
+    </div>
+
+    <p><strong>דרך 2:</strong> פתחו את תפריט הפקודות ובחרו:</p>
+    <div class="code-box">
+        <span class="label">קיצור מקשים</span>
+        <code>Ctrl+Shift+P</code> → חפשו <code>"Claude Code: Open in New Tab"</code>
+    </div>
+
+    <h3>בדיקה שהכל עובד</h3>
+    <p>בתיבת הטקסט של Claude Code, כתבו בקשה פשוטה כמו:</p>
+    <div class="code-box">
+        <span class="label">דוגמה</span>
+        <code>What files are in this folder?</code>
+    </div>
+    <p><strong>אם Claude Code עונה לכם - מזל טוב, הכל עובד!</strong></p>
+
+    <!-- SCREENSHOT: Claude panel -->
+    <div class="screenshot">
+        <img src="images/claude-panel.png" alt="חלון Claude Code פתוח עם שיחה לדוגמה"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: חלון Claude Code פתוח<br>תיבת טקסט למטה, תשובה למעלה</p></div>'">
+        <div class="screenshot-caption">חלון Claude Code - כתבו בקשה ותקבלו תשובה</div>
+    </div>
+
+    <h3>רשימת הכרות</h3>
+    <p>
+        בפעם הראשונה שתפתחו את Claude Code, תראו רשימת "Learn Claude Code" -
+        אלה צעדים קצרים שעוזרים להכיר את הכלי.
+        מומלץ לעבור עליהם, אבל אפשר גם לדלג.
+    </p>
+
+    <h3>קיצורי מקשים חשובים</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th>פעולה</th><th>קיצור מקשים</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>מעבר בין העורך ל-Claude</td><td><kbd>Ctrl</kbd>+<kbd>Esc</kbd></td></tr>
+                <tr><td>פתיחה בטאב חדש</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Esc</kbd></td></tr>
+                <tr><td>שיחה חדשה</td><td><kbd>Ctrl</kbd>+<kbd>N</kbd></td></tr>
+                <tr><td>הוספת קובץ מסומן לשיחה</td><td><kbd>Alt</kbd>+<kbd>K</kbd></td></tr>
+                <tr><td>עצירת Claude באמצע תשובה</td><td><kbd>Escape</kbd></td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ===== SECTION 7: TROUBLESHOOTING ===== -->
+<section class="section" id="troubleshooting">
+    <div class="section-header">
+        <div class="step-number">7</div>
+        <h2>פתרון בעיות נפוצות</h2>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ התוסף לא מופיע אחרי ההתקנה</div>
+        <div class="problem-solution">
+            סגרו את VS Code לחלוטין ופתחו מחדש.
+            אם זה לא עוזר, לחצו <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
+            וחפשו <strong>"Developer: Reload Window"</strong>.
+        </div>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ Claude Code לא נפתח</div>
+        <div class="problem-solution">
+            לחצו על "Claude Code" בשורת הסטטוס הכחולה בתחתית VS Code.
+            אם זה לא עובד, נסו <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
+            ואז <strong>"Claude Code: Open in New Tab"</strong>.
+        </div>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ ההתחברות נכשלת</div>
+        <div class="problem-solution">
+            ודאו שיש חיבור אינטרנט. נסו להתחבר ישירות באתר
+            <a href="https://claude.ai" target="_blank">claude.ai</a>
+            כדי לוודא שהחשבון תקין. אם הבעיה נמשכת, נסו לנקות את הקוקיס של הדפדפן.
+        </div>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ Claude Code איטי או "שוכח" דברים</div>
+        <div class="problem-solution">
+            שיחות ארוכות צורכות הרבה זיכרון.
+            כתבו <code>/clear</code> בתיבת הטקסט כדי לפתוח שיחה חדשה,
+            או <code>/compact</code> כדי לסכם את השיחה ולפנות מקום.
+        </div>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ חיובים לא צפויים</div>
+        <div class="problem-solution">
+            בדקו שלא הוגדר משתנה סביבה בשם <code>ANTHROPIC_API_KEY</code>.
+            אם כן, הוא גורם לחיובים נפרדים. מחקו אותו כדי לחזור לשימוש במנוי.
+        </div>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ Git for Windows לא מותקן</div>
+        <div class="problem-solution">
+            Claude Code חייב את Git כדי לעבוד. התקינו אותו מהאתר
+            <a href="https://git-scm.com/downloads/win" target="_blank">git-scm.com</a>
+            וסגרו ופתחו מחדש את VS Code.
+        </div>
+    </div>
+
+    <div class="problem">
+        <div class="problem-title">❌ תוספים אחרים מפריעים</div>
+        <div class="problem-solution">
+            אם מותקנים תוספי AI אחרים כמו Copilot או Cline,
+            נסו להשבית אותם זמנית ולבדוק אם זה פותר את הבעיה.
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 8: TIPS ===== -->
+<section class="section" id="tips">
+    <div class="section-header">
+        <div class="step-number">8</div>
+        <h2>טיפים למתחילים</h2>
+    </div>
+
+    <p>הנה כמה טיפים שיעזרו לכם להפיק את המקסימום מ-Claude Code:</p>
+
+    <div class="tip-card">
+        <h4>🎯 תנו הוראות ברורות</h4>
+        <p>ככל שתתארו בצורה מדויקת יותר מה אתם רוצים, Claude Code יעשה עבודה טובה יותר.
+        במקום "תעשה לי אתר", כתבו "תבנה לי אתר עם עמוד ראשי שמציג תמונה וטקסט".</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>📋 השתמשו במצב תכנון</h4>
+        <p>לחצו <kbd>Shift</kbd>+<kbd>Tab</kbd> פעמיים כדי להיכנס למצב Plan.
+        במצב הזה, Claude Code מסביר מה הוא מתכנן לעשות לפני שהוא משנה משהו.
+        ככה תוכלו לאשר או לבטל.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>✨ סמנו קוד כשאתם שואלים עליו</h4>
+        <p>אם אתם רוצים לשאול על חלק מסוים בקובץ,
+        סמנו אותו עם העכבר ואז שאלו את Claude. הוא יראה אוטומטית מה סימנתם.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>📎 הפנו לקבצים עם @</h4>
+        <p>כשאתם כותבים ל-Claude, הקלידו @ ואחריו שם קובץ.
+        למשל: <code>@index.html</code> - וככה Claude ידע בדיוק על איזה קובץ אתם מדברים.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>🧹 נקו שיחות ארוכות</h4>
+        <p>כשהשיחה נהיית ארוכה, Claude עלול לשכוח דברים מהתחלה.
+        כתבו <code>/clear</code> כדי לנקות ולהתחיל שיחה חדשה.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>👁️ בדקו שינויים לפני אישור</h4>
+        <p>כש-Claude Code מציע שינויים בקבצים, הוא מראה לכם השוואה בין
+        הגרסה הישנה לחדשה. קחו רגע לבדוק לפני שאתם מאשרים.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>💪 אל תפחדו לטעות</h4>
+        <p>Claude Code שומר "נקודות שחזור" של כל שינוי.
+        אם משהו השתבש, אפשר תמיד לחזור אחורה.
+        ואם אתם לא מרוצים מתשובה, פשוט בקשו אחרת.</p>
+    </div>
+
+    <div class="tip">
+        <div class="tip-title">💡 זכרו</div>
+        אין שאלה טיפשית! Claude Code נוצר כדי לעזור לכל אחד.
+        פשוט כתבו מה אתם רוצים בשפה פשוטה ו-Claude יעשה את המקסימום לעזור.
+    </div>
+</section>
+
+<!-- ===== USEFUL LINKS ===== -->
+<section class="section" id="links">
+    <h2 style="text-align: center; color: var(--green-dark); margin-bottom: 25px;">קישורים שימושיים</h2>
+
+    <div class="links-grid">
+        <a href="https://claude.ai" target="_blank" class="link-card">
+            אתר Claude
+            <small>claude.ai</small>
+        </a>
+        <a href="https://code.claude.com/docs/en/overview" target="_blank" class="link-card">
+            תיעוד רשמי
+            <small>Claude Code Docs</small>
+        </a>
+        <a href="https://code.visualstudio.com" target="_blank" class="link-card">
+            הורדת עורך הקוד
+            <small>VS Code</small>
+        </a>
+        <a href="https://git-scm.com/downloads/win" target="_blank" class="link-card">
+            Git for Windows
+            <small>git-scm.com</small>
+        </a>
+        <a href="https://github.com/anthropics/claude-code/issues" target="_blank" class="link-card">
+            שאלות ובעיות
+            <small>GitHub Issues</small>
+        </a>
+    </div>
+</section>
+
+</div><!-- end container -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <img src="images/logo.png" alt="Tom Hagiladi" class="logo-footer">
+    <p>נבנה עם ❤️ על ידי Tom Hagiladi | פברואר 2026</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">
+        <a href="https://github.com/TomHagiladi">GitHub</a>
+    </p>
+</footer>
+
+</body>
+</html>
