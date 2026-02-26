@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מדריך התקנת Claude Code בתוסף VS Code</title>
-    <meta name="description" content="מדריך מלא בעברית להתקנת Claude Code בתוסף VS Code - צעד אחר צעד למתחילים">
+    <title>מדריך התקנת Claude Code כתוסף ב-VS Code</title>
+    <meta name="description" content="מדריך מלא בעברית להתקנת Claude Code כתוסף ב-VS Code - צעד אחר צעד למתחילים">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -71,10 +71,12 @@
         }
 
         .hero-logo {
-            max-width: 200px;
+            max-width: 220px;
             margin-bottom: 25px;
-            filter: brightness(0) invert(1);
-            opacity: 0.9;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
         .hero h1 {
@@ -515,8 +517,9 @@
         footer .logo-footer {
             max-width: 150px;
             margin-bottom: 15px;
-            filter: brightness(0) invert(1);
-            opacity: 0.6;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 12px;
         }
 
         footer a {
@@ -589,7 +592,7 @@
     <img src="images/logo.png" alt="Tom Hagiladi Logo" class="hero-logo">
     <h1>
         מדריך התקנה
-        <span>Claude Code בתוסף VS Code</span>
+        <span>Claude Code כתוסף ב-VS Code</span>
     </h1>
     <p class="subtitle">מדריך מלא למתחילים - צעד אחר צעד</p>
     <div class="hero-badge">מתאים למתחילים מוחלטים - אין צורך ברקע טכני! ✨</div>
@@ -752,14 +755,14 @@
     </div>
 
     <ol class="steps" start="3">
-        <li>לחצו על הכפתור הגדול <strong>"Download for Windows"</strong></li>
+        <li>לחצו על הכפתור הלבן הגדול <strong>"Download for Windows"</strong></li>
     </ol>
 
     <!-- SCREENSHOT: VS Code download page -->
     <div class="screenshot">
         <img src="images/vscode-download.png" alt="עמוד ההורדה של VS Code עם כפתור Download for Windows"
              onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: עמוד ההורדה של VS Code<br>כפתור Download for Windows במרכז הדף</p></div>'">
-        <div class="screenshot-caption">עמוד ההורדה של VS Code - לחצו על הכפתור הכחול הגדול</div>
+        <div class="screenshot-caption">עמוד ההורדה של VS Code - לחצו על הכפתור הלבן הגדול "Download for Windows"</div>
     </div>
 
     <ol class="steps" start="4">
@@ -793,11 +796,11 @@
     <div class="screenshot">
         <img src="images/git-download.png" alt="עמוד ההורדה של Git for Windows"
              onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: עמוד ההורדה של Git for Windows<br>כפתור Click here to download</p></div>'">
-        <div class="screenshot-caption">עמוד ההורדה של Git for Windows - לחצו על כפתור ההורדה</div>
+        <div class="screenshot-caption">עמוד ההורדה של Git for Windows - לחצו על הקישור המודגש</div>
     </div>
 
     <ol class="steps" start="2">
-        <li>לחצו על <strong>"Click here to download"</strong></li>
+        <li>לחצו על <strong>"Click here to download the latest (2.53.0) x64 version of Git for Windows"</strong></li>
         <li>הריצו את קובץ ההתקנה ולחצו <strong>Next</strong> בכל השלבים</li>
         <li>לא צריך לשנות שום הגדרה - הכל מוגדר כמו שצריך מראש</li>
     </ol>
@@ -823,7 +826,9 @@
 
     <ol class="steps">
         <li>פתחו את VS Code</li>
-        <li>לחצו על צירוף המקשים <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> כדי לפתוח את חלון התוספים</li>
+        <li>פתחו את חלון התוספים באחת משתי דרכים:
+            <br>• לחצו על צירוף המקשים <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>
+            <br>• או לחצו על אייקון הקוביות (ריבועים קטנים) בסרגל הצד השמאלי של VS Code - זה אייקון התוספים</li>
         <li>בשדה החיפוש שנפתח למעלה, הקלידו:</li>
     </ol>
 
@@ -884,13 +889,14 @@
     <div class="screenshot">
         <img src="images/claude-login.png" alt="עמוד ההרשמה של Claude.ai"
              onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: עמוד ההרשמה של claude.ai<br>כפתורי Sign Up ו-Log In</p></div>'">
-        <div class="screenshot-caption">עמוד ההרשמה של Claude - לחצו Sign Up</div>
+        <div class="screenshot-caption">עמוד ההרשמה של Claude - לחצו "Continue with Google" או הזינו אימייל</div>
     </div>
 
     <ol class="steps" start="2">
-        <li>לחצו על <strong>"Sign Up"</strong></li>
-        <li>הזינו כתובת אימייל וצרו סיסמה, או התחברו עם חשבון גוגל</li>
-        <li>אשרו את האימייל שנשלח אליכם</li>
+        <li>יש שתי דרכים להירשם:
+            <br>• <strong>עם חשבון גוגל (הכי קל!):</strong> לחצו על <strong>"Continue with Google"</strong> - זה יחבר אתכם אוטומטית עם חשבון הגוגל שלכם, בלי צורך ליצור סיסמה חדשה
+            <br>• <strong>עם אימייל:</strong> הזינו כתובת אימייל ולחצו <strong>"Continue with email"</strong></li>
+        <li>אם בחרתם אימייל - אשרו את האימייל שנשלח אליכם</li>
         <li>שדרגו למנוי Pro (או גבוה יותר) דרך הגדרות החשבון</li>
     </ol>
 
@@ -929,13 +935,13 @@
     <h3>פתיחת העוזר החכם</h3>
     <p>יש כמה דרכים לפתוח את Claude Code. הנה הקלה ביותר:</p>
 
-    <p><strong>דרך 1:</strong> לחצו על אייקון Claude Code בסרגל הצד (החץ האדום בצילום המסך מראה איפה)</p>
+    <p><strong>דרך 1:</strong> לחצו על אייקון Claude Code בסרגל העליון של VS Code (החץ האדום בצילום המסך מראה איפה)</p>
 
-    <!-- SCREENSHOT: Claude icon in sidebar -->
+    <!-- SCREENSHOT: Claude icon in top bar -->
     <div class="screenshot">
-        <img src="images/status-bar.png" alt="VS Code עם חץ המצביע על אייקון Claude Code בסרגל הצד"
-             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: אייקון Claude Code בסרגל הצד של VS Code</p></div>'">
-        <div class="screenshot-caption">לחצו על אייקון Claude Code בסרגל הצד הימני (החץ האדום מסמן את המיקום)</div>
+        <img src="images/status-bar.png" alt="VS Code עם חץ המצביע על אייקון Claude Code בסרגל העליון"
+             onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder><div class=icon>📸</div><p>צילום מסך: אייקון Claude Code בסרגל העליון של VS Code</p></div>'">
+        <div class="screenshot-caption">לחצו על אייקון Claude Code בסרגל העליון (החץ האדום מסמן את המיקום)</div>
     </div>
 
     <p><strong>דרך 2:</strong> פתחו את תפריט הפקודות ובחרו:</p>
